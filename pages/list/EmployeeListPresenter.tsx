@@ -17,6 +17,7 @@ const EmployeeListPresenter = ({
   handleDelete,
   isLoading
  }) => {
+   console.log('임직원관리')
   // const columns = [
   //   {
   //     title: '사번',

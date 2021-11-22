@@ -1,6 +1,6 @@
-import {Layout, Menu} from 'antd';
+import {Layout} from 'antd';
 import {LogoutOutlined} from '@ant-design/icons';
-const { Header, Content, Sider } = Layout;
+const { Header, Content} = Layout;
 import {LogoutButton, PageTitle} from './Layout.style';
 import SideBar from './SideBar';
 

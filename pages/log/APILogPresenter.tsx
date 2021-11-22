@@ -1,6 +1,7 @@
 import {Table, Button} from 'antd';
 
 const APILogPresenter = ({ data }) => {
+  console.log('API로그')
   // const columns = [
   //   {
   //     title: '사번',
@@ -53,7 +54,7 @@ const APILogPresenter = ({ data }) => {
   
     return (
       <>
-        <Table columns={columns} dataSource={data.data.items} />
+        <Table rowKey={'uid'} columns={columns} dataSource={data.data.items} />
       </>
     )
     //return data.data.items.map((item) => <div key={item.uid}>{item.uid}</div>);
