@@ -1,0 +1,38 @@
+import React from 'react';
+import 'antd/dist/antd.css'; 
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { NextComponentType } from "next"
+import { AppContext, AppInitialProps, AppProps } from "next/app"
+import { Hydrate } from 'react-query/hydration'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import {TokenProvider} from '../components/Token';
+
+const MyApp: NextComponentType<AppContext, AppInitialProps, AppProps> = ({ Component, pageProps }) => {
+  const queryClientRef = React.useRef<QueryClient>()
+  if (!queryClientRef.current) {
+    queryClientRef.current = new QueryClient()
+  }
+
+  return <>
+    <TokenProvider>
+      <QueryClientProvider client={queryClientRef.current}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <Component {...pageProps} />
+        </Hydrate>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </TokenProvider>
+  </>
+}
+
+MyApp.getInitialProps = async ({ Component, ctx }: AppContext): Promise<AppInitialProps> => {
+  let pageProps = {}
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx)
+  }
+
+  return { pageProps }
+}
+
+export default MyApp
