@@ -1,14 +1,22 @@
 import {Table, Button, Pagination, Popconfirm} from 'antd';
+import { Key } from 'react';
 import {EmployeeInfo} from './EmployeeList.model';
 
 type Props = {
   data: EmployeeInfo[];
-  handleDelete: () => unknown;
-  handleSelectRow: (rows: string[]) => void;
-  selectedRowIDList: string[];
+  selectedRowIdList: string[];
+  handleSelectedRows: (rows: string[]) => void;
+  handleDelete: () => Promise<void>;
+  isLoading: boolean;
 }
 
-const EmployeeListPresenter = ({ data }) => {
+const EmployeeListPresenter = ({ 
+  data, 
+  selectedRowIdList, 
+  handleSelectedRows,
+  handleDelete,
+  isLoading
+ }) => {
   // const columns = [
   //   {
   //     title: '사번',
@@ -50,11 +58,6 @@ const EmployeeListPresenter = ({ data }) => {
       title: '가격',
       dataIndex: 'price',
       key: 'price',
-    },
-    {
-      title: '삭제',
-      key: 'delete',
-      render: (text, record) => <Button>삭제</Button>,
     }
   ];
 
@@ -64,30 +67,27 @@ const EmployeeListPresenter = ({ data }) => {
   
     return (
       <>
-        <ListHeaderWrapper>
-          <ListHeaderButtons>
-            <Popconfirm
-              title={`선택된 ${selectedRowIDList.length}개의 행을 삭제합니다. 정말 삭제하시겠습니까?`}
-              onConfirm={handleDelete}
-              okText={'삭제'}
-              cancelText={'취소'}
-            >
-              <Button danger htmlType={'button'} disabled={!selectedRowIDList.length}>
-                삭제
-              </Button>
-            </Popconfirm>
-          </ListHeaderButtons>
-        </ListHeaderWrapper>
-        <Table columns={columns} dataSource={data.data.items} rowKey={'id'} loading={isLoading} rowSelection={{
+        <div>
+          <Popconfirm
+            title={`선택된 ${selectedRowIdList.length}개의 행을 삭제합니다. 정말 삭제하시겠습니까?`}
+            onConfirm={handleDelete}
+            okText={'삭제'}
+            cancelText={'취소'}
+          >
+            <Button danger htmlType={'button'} disabled={!selectedRowIdList.length}>
+              삭제
+            </Button>
+          </Popconfirm>
+        </div>
+        <Table columns={columns} dataSource={data.data.items} rowKey={'uid'} loading={isLoading} rowSelection={{
           type: 'checkbox',
           onChange: (selectedKeys: Key[]) => {
-            handleSelectRow(selectedKeys as string[]);
+            handleSelectedRows(selectedKeys as string[]);
           }
         }} />
         <Pagination current={1} onChange={onChange} total={20} />
       </>
     )
-    //return data.data.items.map((item) => <div key={item.uid}>{item.uid}</div>);
 };
 
 export default EmployeeListPresenter;

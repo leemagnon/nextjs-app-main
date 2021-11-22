@@ -19,25 +19,24 @@ const getEmployees = async (token: string) => {
 
 const EmployeeListContainer = () => {
     const {token} = useToken();
-    const [page, setPage] = useState(1);
-    const [isLastPage, setIsLastPage] = useState(false);
     const [currentParams, setCurrentParams] = useState<EmployeeListRequestParams>({limit: 20, page: 1});
     const [selectedRowIdList, setSelectedRowIdList] = useState<string[]>([]);
 
-    let {isLoading, data, refetch} = useQuery('employees', () => getEmployees(token), {
+    const {isLoading, data, refetch} = useQuery('employees', () => getEmployees(token), {
         refetchOnMount: false, 
         refetchOnReconnect: false,
         refetchOnWindowFocus: false
-      }); // prefetch된 쿼리에 대해 useQuery 인스턴스가 없으면 cacheTime에 지정된 시간 후에 삭제되고 가비지 콜렉팅 된다.
+      }); 
 
-    const handleSelectRow = (selectedRows: string[]) => {
+    const handleSelectedRows = (selectedRows: string[]) => {
+        console.log('selectedRows', selectedRows);
         setSelectedRowIdList(selectedRows);
     };
 
     const handleDelete = async () => {
         try {
             await Promise.all(
-                selectedRowIdList.map(id => axios.delete(`${BASE_URL}/뭐뭠`).then(response => response.data))
+                selectedRowIdList.map(id => axios.delete(``).then(response => response.data))
             );
             setSelectedRowIdList([]);
             await refetch();
@@ -51,6 +50,10 @@ const EmployeeListContainer = () => {
         <LayoutPresenter title='임직원 관리'>
             <EmployeeListPresenter 
                 data={data}
+                selectedRowIdList={selectedRowIdList}
+                handleSelectedRows={handleSelectedRows}
+                handleDelete={handleDelete}
+                isLoading={isLoading}
             />
         </LayoutPresenter>
     );

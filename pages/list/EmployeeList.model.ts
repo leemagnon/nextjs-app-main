@@ -1,14 +1,14 @@
-export type EmployeeListRequestParams = {
+export interface EmployeeListRequestParams {
     page: number;
     limit: 20;
 }
 
-export type EmployeeListResponse = {
+export interface EmployeeListResponse {
     data: EmployeeInfo[];
     total: number;
 }
 
-export type EmployeeInfo = {
+export interface EmployeeInfo {
     id: string;
     email: string;
     no: string;
